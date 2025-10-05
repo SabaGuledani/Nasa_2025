@@ -1,8 +1,9 @@
 from __future__ import annotations
 import json
+import re
+import ast
+from google.genai import types
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -66,3 +67,18 @@ def find_elem(selector:str, wd:webdriver, selector_method:str="xpath"):
     except Exception as e:
         print(e)
         return None
+
+
+def get_history(chat_history:list[dict]) -> list[Content]:
+    '''parse chat history messages as Content type from chat_history list'''
+    for msg in chat_history:
+        print(f"content: {msg['content']}")
+    messages = [
+        types.Content(
+            role=msg["role"],
+            parts=[types.Part.from_text(text=msg["content"])]
+        )
+        for msg in chat_history
+    ]
+
+    return messages
