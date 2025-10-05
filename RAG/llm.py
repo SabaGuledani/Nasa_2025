@@ -35,6 +35,7 @@ def handle_router(client:Client, messages:list[Content], llm_model_name:str,rout
     
     return response
 
+
 def handle_answer(client:Client, messages:list[Content], llm_model_name:str) -> types.GenerateContentResponse:
     current_time = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
 

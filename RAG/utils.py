@@ -82,3 +82,24 @@ def get_history(chat_history:list[dict]) -> list[Content]:
     ]
 
     return messages
+
+def clean_response(text, parse_as="json"):
+    """
+    Cleans LLM output by removing code fences and parses it.
+    
+    Args:
+        text (str): The LLM response text.
+        parse_as (str): "json" or "python". Determines parser.
+        
+    Returns:
+        Parsed Python object (dict/list/etc.).
+    """
+    # Remove ```json, ```python, or ``` code fences
+    cleaned = re.sub(r'```(?:json|python)?', '', text).strip()
+    
+    if parse_as == "json":
+        return json.loads(cleaned)
+    elif parse_as == "python":
+        return ast.literal_eval(cleaned)
+    else:
+        raise ValueError("parse_as must be 'json' or 'python'")
